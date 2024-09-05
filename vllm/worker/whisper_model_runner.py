@@ -108,6 +108,7 @@ class WhisperModelRunner(ModelRunner):
         
         whisper_data_list = []
 
+
         for seq_group_metadata in seq_group_metadata_list:
             seq_ids = list(seq_group_metadata.seq_data.keys())
             is_prompt = seq_group_metadata.is_prompt
@@ -129,8 +130,12 @@ class WhisperModelRunner(ModelRunner):
                         whisper_data = whisper_data.to(self.model_config.dtype).input_features[0]
             
                     whisper_data_list.append(whisper_data)
-        
-        whisper_data = whisper_data_list[0].cuda()
+
+        whisper_data = torch.tensor(whisper_data_list,
+                                           dtype=self.model_config.dtype,
+                                           device=self.device)
+
+        # whisper_data = whisper_data_list[0].cuda()
 
         return whisper_data
 
