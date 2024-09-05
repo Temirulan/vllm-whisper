@@ -131,9 +131,10 @@ class WhisperModelRunner(ModelRunner):
             
                     whisper_data_list.append(whisper_data)
 
-        whisper_data = torch.tensor(whisper_data_list,
-                                           dtype=self.model_config.dtype,
-                                           device=self.device)
+        whisper_data = torch.cat(whisper_data_list, dim=0).to(self.device)
+        # whisper_data = torch.tensor(whisper_data_list,
+        #                                    dtype=self.model_config.dtype,
+        #                                    device=self.device)
 
         # whisper_data = whisper_data_list[0].cuda()
 
