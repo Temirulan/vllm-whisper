@@ -21,13 +21,14 @@ RUN echo 'tzdata tzdata/Areas select America' | debconf-set-selections \
     && apt-get install -y ccache software-properties-common \
     && add-apt-repository ppa:deadsnakes/ppa \
     && apt-get update -y \
-    && apt-get install -y python${PYTHON_VERSION} python${PYTHON_VERSION}-dev python${PYTHON_VERSION}-venv python3-pip \
+    && apt-get install -y python${PYTHON_VERSION} python${PYTHON_VERSION}-dev python${PYTHON_VERSION}-venv python3-pip ffmpeg \
     && if [ "${PYTHON_VERSION}" != "3" ]; then update-alternatives --install /usr/bin/python3 python3 /usr/bin/python${PYTHON_VERSION} 1; fi \
     && python3 --version \
     && python3 -m pip --version
 
 RUN apt-get update -y \
-    && apt-get install -y python3-pip git curl sudo
+    && apt-get install -y python3-pip git curl sudo \
+    && apt-get install -y ffmpeg
 
 # Workaround for https://github.com/openai/triton/issues/2507 and
 # https://github.com/pytorch/pytorch/issues/107960 -- hopefully
@@ -131,7 +132,7 @@ ARG CUDA_VERSION=12.4.1
 WORKDIR /vllm-workspace
 
 RUN apt-get update -y \
-    && apt-get install -y python3-pip git vim
+    && apt-get install -y python3-pip git vim ffmpeg
 
 # Workaround for https://github.com/openai/triton/issues/2507 and
 # https://github.com/pytorch/pytorch/issues/107960 -- hopefully
@@ -143,6 +144,7 @@ RUN ldconfig /usr/local/cuda-$(echo $CUDA_VERSION | cut -d. -f1,2)/compat/
 RUN --mount=type=bind,from=build,src=/workspace/dist,target=/vllm-workspace/dist \
     --mount=type=cache,target=/root/.cache/pip \
     python3 -m pip install dist/*.whl --verbose
+
 #################### vLLM installation IMAGE ####################
 
 
