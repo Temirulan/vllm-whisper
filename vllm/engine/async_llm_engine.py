@@ -579,6 +579,7 @@ class AsyncLLMEngine:
         lora_request: Optional[LoRARequest] = None,
         trace_headers: Optional[Dict[str, str]] = None,
     ) -> AsyncStream:
+        logger.info(f"TEMIRULAN add_request {request_id} {inputs} {params} {arrival_time} {lora_request} {trace_headers}")
         if self.log_requests:
             if isinstance(inputs, str):
                 shortened_prompt = inputs
